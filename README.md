@@ -1,6 +1,12 @@
 # Arrow.Compression.NativeCompressions
 
-Optional NativeCompressions-based compression codec backend for Apache Arrow .NET.
+High-performance [NativeCompressions](https://github.com/bgrainger/NativeCompressions)-based
+compression codec backend for Apache Arrow .NET.
+
+This package exists because Apache Arrow .NET's default compression backend currently uses K4os for
+LZ4, and that path was not fast enough for read-heavy Arrow IPC workloads. In this repository's
+benchmark, the NativeCompressions backend reads LZ4-compressed Arrow IPC streams about 40% faster
+than Apache Arrow .NET's default compression factory.
 
 This package is not an official Apache Arrow package. It implements Apache Arrow .NET's
 `ICompressionCodecFactory` / `ICompressionCodec` extension points so applications can opt into
@@ -10,7 +16,7 @@ NativeCompressions for LZ4 and Zstandard compressed Arrow IPC streams.
 
 - Experimental / preview.
 - Targets `net8.0`, `net9.0`, and `net10.0`.
-- Depends on `NativeCompressions`, which is currently preview.
+- Depends on [`NativeCompressions`](https://github.com/bgrainger/NativeCompressions), which is currently preview.
 - Not strong-named while NativeCompressions assemblies are not strong-named.
 
 ## Usage
@@ -37,8 +43,8 @@ while ((batch = await reader.ReadNextRecordBatchAsync()) is not null)
 ## Why this exists
 
 Apache Arrow .NET already allows custom compression backends through `ICompressionCodecFactory`.
-This repository keeps NativeCompressions as an opt-in dependency instead of adding native runtime
-dependencies to Apache Arrow .NET's default compression package.
+This repository keeps NativeCompressions as an opt-in dependency for applications that need faster
+Arrow IPC compression/decompression without changing Apache Arrow .NET itself.
 
 ## Benchmarks
 
