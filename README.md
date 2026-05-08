@@ -21,6 +21,12 @@ NativeCompressions for LZ4 and Zstandard compressed Arrow IPC streams.
 
 ## Usage
 
+Install the package:
+
+```bash
+dotnet add package ArrowNet.Compression.NativeCompressions
+```
+
 ```csharp
 using Apache.Arrow.Ipc;
 using ArrowNet.Compression.NativeCompressions;
