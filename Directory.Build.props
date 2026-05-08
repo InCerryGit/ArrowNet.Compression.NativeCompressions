@@ -7,10 +7,10 @@
     <SignAssembly>false</SignAssembly>
     <Authors>InCerryGit</Authors>
     <Company>InCerryGit</Company>
-    <Product>Arrow.Compression.NativeCompressions</Product>
+    <Product>ArrowNet.Compression.NativeCompressions</Product>
     <VersionPrefix>0.1.0-preview.1</VersionPrefix>
-    <RepositoryUrl>https://github.com/InCerryGit/Arrow.Compression.NativeCompressions</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/InCerryGit/Arrow.Compression.NativeCompressions</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/InCerryGit/ArrowNet.Compression.NativeCompressions</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/InCerryGit/ArrowNet.Compression.NativeCompressions</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

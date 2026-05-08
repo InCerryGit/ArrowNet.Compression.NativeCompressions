@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Arrow.Compression.NativeCompressions\Arrow.Compression.NativeCompressions.csproj" />
+    <ProjectReference Include="..\..\src\ArrowNet.Compression.NativeCompressions\ArrowNet.Compression.NativeCompressions.csproj" />
   </ItemGroup>
 
 </Project>

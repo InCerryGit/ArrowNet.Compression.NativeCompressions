@@ -1,7 +1,7 @@
 using System;
 using Apache.Arrow.Ipc;
 
-namespace Arrow.Compression.NativeCompressions;
+namespace ArrowNet.Compression.NativeCompressions;
 
 public sealed class NativeCompressionsCodecFactory : ICompressionCodecFactory
 {

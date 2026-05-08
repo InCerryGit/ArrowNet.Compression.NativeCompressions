@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/benchmarks/">
+    <Project Path="benchmarks/ArrowNet.Compression.NativeCompressions.Benchmarks/ArrowNet.Compression.NativeCompressions.Benchmarks.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/ArrowNet.Compression.NativeCompressions/ArrowNet.Compression.NativeCompressions.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ArrowNet.Compression.NativeCompressions.Tests/ArrowNet.Compression.NativeCompressions.Tests.csproj" />
+  </Folder>
+</Solution>

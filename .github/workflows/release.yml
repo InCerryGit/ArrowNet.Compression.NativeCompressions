@@ -48,16 +48,16 @@ jobs:
           echo "PACKAGE_VERSION=$version" >> "$GITHUB_ENV"
 
       - name: Restore
-        run: dotnet restore Arrow.Compression.NativeCompressions.slnx
+        run: dotnet restore ArrowNet.Compression.NativeCompressions.slnx
 
       - name: Build
-        run: dotnet build Arrow.Compression.NativeCompressions.slnx -c Release --no-restore
+        run: dotnet build ArrowNet.Compression.NativeCompressions.slnx -c Release --no-restore
 
       - name: Test
-        run: dotnet test tests/Arrow.Compression.NativeCompressions.Tests/Arrow.Compression.NativeCompressions.Tests.csproj -c Release --no-build
+        run: dotnet test tests/ArrowNet.Compression.NativeCompressions.Tests/ArrowNet.Compression.NativeCompressions.Tests.csproj -c Release --no-build
 
       - name: Pack
-        run: dotnet pack src/Arrow.Compression.NativeCompressions/Arrow.Compression.NativeCompressions.csproj -c Release --no-build -p:PackageVersion=$PACKAGE_VERSION -o ./nugetpkgs
+        run: dotnet pack src/ArrowNet.Compression.NativeCompressions/ArrowNet.Compression.NativeCompressions.csproj -c Release --no-build -p:PackageVersion=$PACKAGE_VERSION -o ./nugetpkgs
 
       - name: Upload package artifact
         uses: actions/upload-artifact@v4

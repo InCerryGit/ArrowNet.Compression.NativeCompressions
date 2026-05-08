@@ -2,7 +2,7 @@ using System.Text;
 using Apache.Arrow;
 using Apache.Arrow.Ipc;
 using Apache.Arrow.Memory;
-using Arrow.Compression.NativeCompressions;
+using ArrowNet.Compression.NativeCompressions;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 

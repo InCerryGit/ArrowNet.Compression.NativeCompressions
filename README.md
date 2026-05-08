@@ -1,4 +1,4 @@
-# Arrow.Compression.NativeCompressions
+# ArrowNet.Compression.NativeCompressions
 
 High-performance [NativeCompressions](https://github.com/bgrainger/NativeCompressions)-based
 compression codec backend for Apache Arrow .NET.
@@ -23,7 +23,7 @@ NativeCompressions for LZ4 and Zstandard compressed Arrow IPC streams.
 
 ```csharp
 using Apache.Arrow.Ipc;
-using Arrow.Compression.NativeCompressions;
+using ArrowNet.Compression.NativeCompressions;
 
 var codecFactory = new NativeCompressionsCodecFactory();
 using var reader = new ArrowStreamReader(stream, codecFactory);
@@ -55,7 +55,7 @@ The workload is a deterministic 65,536-row `int + string` record batch.
 Command:
 
 ```bash
-dotnet run --project benchmarks/Arrow.Compression.NativeCompressions.Benchmarks/Arrow.Compression.NativeCompressions.Benchmarks.csproj -c Release -f net8.0 -- --filter "*ArrowIpcCompressionBenchmarks*"
+dotnet run --project benchmarks/ArrowNet.Compression.NativeCompressions.Benchmarks/ArrowNet.Compression.NativeCompressions.Benchmarks.csproj -c Release -f net8.0 -- --filter "*ArrowIpcCompressionBenchmarks*"
 ```
 
 Environment for the run below: BenchmarkDotNet 0.15.8, Ubuntu 24.04.2 LTS,

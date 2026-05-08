@@ -4,7 +4,7 @@ using System.IO;
 using Apache.Arrow.Ipc;
 using NativeCompressions;
 
-namespace Arrow.Compression.NativeCompressions;
+namespace ArrowNet.Compression.NativeCompressions;
 
 internal sealed class NativeCompressionsLz4CompressionCodec : ICompressionCodec
 {

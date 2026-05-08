@@ -1,7 +1,7 @@
 using Apache.Arrow.Ipc;
 using Xunit;
 
-namespace Arrow.Compression.NativeCompressions.Tests;
+namespace ArrowNet.Compression.NativeCompressions.Tests;
 
 public sealed class NativeCompressionsCodecFactoryTests
 {

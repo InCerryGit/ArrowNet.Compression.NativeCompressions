@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
-    <PackageId>Arrow.Compression.NativeCompressions</PackageId>
+    <PackageId>ArrowNet.Compression.NativeCompressions</PackageId>
     <Description>NativeCompressions-based optional compression codec backend for Apache Arrow .NET.</Description>
     <PackageTags>apache-arrow;arrow;nativecompressions;lz4;zstd;compression</PackageTags>
   </PropertyGroup>
