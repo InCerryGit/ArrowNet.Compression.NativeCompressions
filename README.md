@@ -5,8 +5,8 @@ compression codec backend for Apache Arrow .NET.
 
 This package exists because Apache Arrow .NET's default compression backend currently uses K4os for
 LZ4, and that path was not fast enough for read-heavy Arrow IPC workloads. In this repository's
-benchmark, the NativeCompressions backend reads LZ4-compressed Arrow IPC streams about 40% faster
-than Apache Arrow .NET's default compression factory.
+benchmarks, the NativeCompressions backend reads LZ4-compressed Arrow IPC streams about 28% to 47%
+faster than Apache Arrow .NET's default compression factory across 500k to 2M-row workloads.
 
 This package is not an official Apache Arrow package. It implements Apache Arrow .NET's
 `ICompressionCodecFactory` / `ICompressionCodec` extension points so applications can opt into
@@ -56,7 +56,7 @@ Arrow IPC compression/decompression without changing Apache Arrow .NET itself.
 
 The benchmark project compares this package's `NativeCompressionsCodecFactory` with Apache Arrow
 .NET's default `Apache.Arrow.Compression.CompressionCodecFactory` on Arrow IPC read/write paths.
-The workload is a deterministic 65,536-row `int + string` record batch.
+The workloads are deterministic 500k, 1M, and 2M-row `int + string` record batches.
 
 Command:
 
@@ -67,12 +67,20 @@ dotnet run --project benchmarks/ArrowNet.Compression.NativeCompressions.Benchmar
 Environment for the run below: BenchmarkDotNet 0.15.8, Ubuntu 24.04.2 LTS,
 Intel Core i7-14700K, .NET SDK 10.0.107, runtime .NET 8.0.26.
 
-| Path | Codec | Apache.Arrow.Compression | NativeCompressions | Difference |
-| --- | --- | ---: | ---: | ---: |
-| Write compressed IPC stream | LZ4 frame | 1,823.1 us | 1,713.3 us | 6.0% faster |
-| Read compressed IPC stream | LZ4 frame | 545.0 us | 312.2 us | 42.7% faster |
-| Write compressed IPC stream | Zstd | 2,575.8 us | 2,003.4 us | 22.2% faster |
-| Read compressed IPC stream | Zstd | 1,006.7 us | 874.9 us | 13.1% faster |
+| Rows | Path | Codec | Apache.Arrow.Compression | NativeCompressions | Difference |
+| ---: | --- | --- | ---: | ---: | ---: |
+| 500k | Write compressed IPC stream | LZ4 frame | 15.563 ms | 14.576 ms | 6.3% faster |
+| 500k | Read compressed IPC stream | LZ4 frame | 3.992 ms | 2.210 ms | 44.6% faster |
+| 500k | Write compressed IPC stream | Zstd | 21.669 ms | 17.017 ms | 21.5% faster |
+| 500k | Read compressed IPC stream | Zstd | 8.003 ms | 6.761 ms | 15.5% faster |
+| 1M | Write compressed IPC stream | LZ4 frame | 32.383 ms | 31.384 ms | 3.1% faster |
+| 1M | Read compressed IPC stream | LZ4 frame | 9.057 ms | 4.811 ms | 46.9% faster |
+| 1M | Write compressed IPC stream | Zstd | 41.174 ms | 36.390 ms | 11.6% faster |
+| 1M | Read compressed IPC stream | Zstd | 16.860 ms | 14.659 ms | 13.1% faster |
+| 2M | Write compressed IPC stream | LZ4 frame | 78.786 ms | 73.402 ms | 6.8% faster |
+| 2M | Read compressed IPC stream | LZ4 frame | 28.346 ms | 20.444 ms | 27.9% faster |
+| 2M | Write compressed IPC stream | Zstd | 92.348 ms | 82.462 ms | 10.7% faster |
+| 2M | Read compressed IPC stream | Zstd | 43.349 ms | 40.209 ms | 7.2% faster |
 
 The NativeCompressions compression path uses pooled buffers with span-based output APIs to avoid the
 temporary compressed `byte[]` allocation used by the one-shot APIs. These numbers are end-to-end Arrow

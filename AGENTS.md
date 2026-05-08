@@ -36,7 +36,7 @@ Compact repo facts for future OpenCode sessions. Keep this file limited to thing
 - README benchmark numbers must come from this repo's full BenchmarkDotNet project; update them only with the exact command, environment, and result artifact from that run.
 - Benchmark code should compare `NativeCompressionsCodecFactory` against `Apache.Arrow.Compression.CompressionCodecFactory` on Arrow IPC read/write paths for both LZ4 frame and Zstd when feasible.
 - Current compression path uses pooled buffers with span-based output APIs; avoid reverting to one-shot `Compress(...)` APIs that allocate compressed `byte[]` values.
-- Current benchmark workload is deterministic `int + string` Arrow IPC data; write-path results include Arrow IPC writer and `MemoryStream.ToArray()` costs, not pure codec throughput.
+- Current benchmark workloads are deterministic 500k, 1M, and 2M-row `int + string` Arrow IPC data; write-path results include Arrow IPC writer and `MemoryStream.ToArray()` costs, not pure codec throughput.
 - Arrow IPC buffers may include padding after the compressed frame; preserve the exact-output-size decompression contract and validate any decoder changes against padded producer payloads.
 
 ## Files to avoid editing

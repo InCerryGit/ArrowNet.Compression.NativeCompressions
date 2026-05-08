@@ -11,11 +11,12 @@ BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args);
 [MemoryDiagnoser]
 public class ArrowIpcCompressionBenchmarks
 {
-    private const int RowCount = 65_536;
-
     private RecordBatch _recordBatch = null!;
     private byte[] _officialCompressedStream = null!;
     private ICompressionCodecFactory _factory = null!;
+
+    [Params(500_000, 1_000_000, 2_000_000)]
+    public int RowCount { get; set; }
 
     [Params(CompressionCodecType.Lz4Frame, CompressionCodecType.Zstd)]
     public CompressionCodecType Codec { get; set; }
@@ -26,7 +27,7 @@ public class ArrowIpcCompressionBenchmarks
     [GlobalSetup]
     public void GlobalSetup()
     {
-        _recordBatch = CreateRecordBatch();
+        _recordBatch = CreateRecordBatch(RowCount);
         _factory = CreateFactory(Backend);
 
         // Use one official Apache Arrow IPC payload for read benchmarks so both factories decompress identical bytes.
@@ -94,12 +95,12 @@ public class ArrowIpcCompressionBenchmarks
         return stream.ToArray();
     }
 
-    private static RecordBatch CreateRecordBatch()
+    private static RecordBatch CreateRecordBatch(int rowCount)
     {
         var ids = new Int32Array.Builder();
         var categories = new StringArray.Builder();
 
-        for (int i = 0; i < RowCount; i++)
+        for (int i = 0; i < rowCount; i++)
         {
             ids.Append((i * 31) ^ (i >> 3));
             categories.Append($"category-{i % 128:D3}-bucket-{(i * 17) % 31:D2}", Encoding.UTF8);
