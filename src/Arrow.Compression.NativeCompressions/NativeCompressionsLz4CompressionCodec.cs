@@ -10,8 +10,16 @@ internal sealed class NativeCompressionsLz4CompressionCodec : ICompressionCodec
 {
     public void Compress(ReadOnlyMemory<byte> source, Stream destination)
     {
-        byte[] compressed = LZ4.Compress(source.Span);
-        destination.Write(compressed, 0, compressed.Length);
+        byte[] buffer = ArrayPool<byte>.Shared.Rent(LZ4.GetMaxCompressedLength(source.Length));
+        try
+        {
+            int bytesWritten = LZ4.Compress(source.Span, buffer);
+            destination.Write(buffer.AsSpan(0, bytesWritten));
+        }
+        finally
+        {
+            ArrayPool<byte>.Shared.Return(buffer);
+        }
     }
 
     public int Decompress(ReadOnlyMemory<byte> source, Memory<byte> destination)

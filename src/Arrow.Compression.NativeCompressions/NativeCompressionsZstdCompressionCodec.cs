@@ -17,8 +17,16 @@ internal sealed class NativeCompressionsZstdCompressionCodec : ICompressionCodec
 
     public void Compress(ReadOnlyMemory<byte> source, Stream destination)
     {
-        byte[] compressed = Zstandard.Compress(source.Span, _compressionLevel);
-        destination.Write(compressed, 0, compressed.Length);
+        byte[] buffer = ArrayPool<byte>.Shared.Rent(Zstandard.GetMaxCompressedLength(source.Length));
+        try
+        {
+            int bytesWritten = Zstandard.Compress(source.Span, buffer, _compressionLevel);
+            destination.Write(buffer.AsSpan(0, bytesWritten));
+        }
+        finally
+        {
+            ArrayPool<byte>.Shared.Return(buffer);
+        }
     }
 
     public int Decompress(ReadOnlyMemory<byte> source, Memory<byte> destination)

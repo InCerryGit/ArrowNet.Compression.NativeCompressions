@@ -57,14 +57,16 @@ Intel Core i7-14700K, .NET SDK 10.0.107, runtime .NET 8.0.26.
 
 | Path | Codec | Apache.Arrow.Compression | NativeCompressions | Difference |
 | --- | --- | ---: | ---: | ---: |
-| Write compressed IPC stream | LZ4 frame | 1,742.6 us | 1,840.1 us | 5.6% slower |
-| Read compressed IPC stream | LZ4 frame | 533.3 us | 312.6 us | 41.4% faster |
-| Write compressed IPC stream | Zstd | 2,525.1 us | 2,169.8 us | 14.1% faster |
-| Read compressed IPC stream | Zstd | 1,036.1 us | 881.2 us | 15.0% faster |
+| Write compressed IPC stream | LZ4 frame | 1,823.1 us | 1,713.3 us | 6.0% faster |
+| Read compressed IPC stream | LZ4 frame | 545.0 us | 312.2 us | 42.7% faster |
+| Write compressed IPC stream | Zstd | 2,575.8 us | 2,003.4 us | 22.2% faster |
+| Read compressed IPC stream | Zstd | 1,006.7 us | 874.9 us | 13.1% faster |
 
-These numbers are end-to-end Arrow IPC benchmarks, not pure codec throughput. The write path includes
-Arrow IPC writer work and `MemoryStream.ToArray()` allocation/copy costs. Re-run the benchmark on your
-target hardware and workload before making deployment decisions.
+The NativeCompressions compression path uses pooled buffers with span-based output APIs to avoid the
+temporary compressed `byte[]` allocation used by the one-shot APIs. These numbers are end-to-end Arrow
+IPC benchmarks, not pure codec throughput. The write path still includes Arrow IPC writer work and
+`MemoryStream.ToArray()` allocation/copy costs. Re-run the benchmark on your target hardware and workload
+before making deployment decisions.
 
 ## Known limitations
 
