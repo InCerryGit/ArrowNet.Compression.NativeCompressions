@@ -26,13 +26,16 @@ Compact repo facts for future OpenCode sessions. Keep this file limited to thing
 - Benchmark dry run: `dotnet run --project benchmarks/Arrow.Compression.NativeCompressions.Benchmarks/Arrow.Compression.NativeCompressions.Benchmarks.csproj -c Release -f net8.0 -- --filter "*ArrowIpcCompressionBenchmarks*" --job Dry`
 - Full benchmarks: `dotnet run --project benchmarks/Arrow.Compression.NativeCompressions.Benchmarks/Arrow.Compression.NativeCompressions.Benchmarks.csproj -c Release -f net8.0 -- --filter "*ArrowIpcCompressionBenchmarks*"`
 - Pack: `dotnet pack -c Release`
-- There is no repo-local `global.json`, `NuGet.config`, `Directory.Packages.props`, `.editorconfig`, or CI workflow; do not assume pinned SDKs, custom NuGet sources, central package management, formatter config, or GitHub Actions behavior.
+- CI workflow: `.github/workflows/ci.yml` restores, builds, and tests on `main` pushes and PRs.
+- Release workflow: `.github/workflows/release.yml` publishes to NuGet from `v*.*.*` tags or manual `workflow_dispatch`; it strips a leading `v` and requires the `NUGET_API_KEY` secret.
+- There is no repo-local `global.json`, `NuGet.config`, `Directory.Packages.props`, or `.editorconfig`; do not assume pinned SDKs, custom NuGet sources, central package management, or formatter config.
 
 ## Tests and known edge cases
 
 - Existing tests are self-contained xUnit round trips using a deterministic 256 KiB payload for LZ4 and Zstd.
 - README benchmark numbers must come from this repo's full BenchmarkDotNet project; update them only with the exact command, environment, and result artifact from that run.
 - Benchmark code should compare `NativeCompressionsCodecFactory` against `Apache.Arrow.Compression.CompressionCodecFactory` on Arrow IPC read/write paths for both LZ4 frame and Zstd when feasible.
+- Current compression path uses pooled buffers with span-based output APIs; avoid reverting to one-shot `Compress(...)` APIs that allocate compressed `byte[]` values.
 - Current benchmark workload is deterministic `int + string` Arrow IPC data; write-path results include Arrow IPC writer and `MemoryStream.ToArray()` costs, not pure codec throughput.
 - Arrow IPC buffers may include padding after the compressed frame; preserve the exact-output-size decompression contract and validate any decoder changes against padded producer payloads.
 
