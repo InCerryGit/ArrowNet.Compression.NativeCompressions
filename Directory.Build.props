@@ -1,0 +1,19 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <SignAssembly>false</SignAssembly>
+    <Authors>InCerryGit</Authors>
+    <Company>InCerryGit</Company>
+    <Product>Arrow.Compression.NativeCompressions</Product>
+    <VersionPrefix>0.1.0-preview.1</VersionPrefix>
+    <RepositoryUrl>https://github.com/InCerryGit/Arrow.Compression.NativeCompressions</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/InCerryGit/Arrow.Compression.NativeCompressions</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+</Project>
