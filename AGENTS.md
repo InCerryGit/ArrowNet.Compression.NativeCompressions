@@ -1,0 +1,41 @@
+# Arrow.Compression.NativeCompressions — Agent Notes
+
+Compact repo facts for future OpenCode sessions. Keep this file limited to things an agent is likely to guess wrong.
+
+## Project shape
+
+- Independent, optional NativeCompressions backend for Apache Arrow .NET; never describe it as an official Apache Arrow package.
+- Solution file is `Arrow.Compression.NativeCompressions.slnx` with three projects: `src/Arrow.Compression.NativeCompressions`, `tests/Arrow.Compression.NativeCompressions.Tests`, and `benchmarks/Arrow.Compression.NativeCompressions.Benchmarks`.
+- Public entrypoint is `NativeCompressionsCodecFactory`; codec implementations are internal. Consumers pass the factory to Arrow readers or `IpcOptions.CompressionCodecFactory`.
+- Supported codecs are only `CompressionCodecType.Lz4Frame` and `CompressionCodecType.Zstd`. Unsupported codecs should fail explicitly.
+
+## Package and build constraints
+
+- Package id is `Arrow.Compression.NativeCompressions`; target frameworks are `net8.0`, `net9.0`, and `net10.0`.
+- Runtime dependencies are `Apache.Arrow 23.0.0` and preview `NativeCompressions 0.6.0`; keep README/package metadata clear that this package is experimental/preview.
+- `Directory.Build.props` sets `LangVersion=latest`, nullable and implicit usings on, `TreatWarningsAsErrors=true`, `GenerateDocumentationFile=true`, and `SignAssembly=false`.
+- Do not enable strong-name signing until NativeCompressions dependencies are strong-named.
+- Keep the core package small: no auto-detection, DI abstractions, config system, fallback chain, or Apache Arrow fork/patch unless explicitly requested.
+
+## Verification commands
+
+- Build: `dotnet build -c Release`
+- Tests: `dotnet test -c Release`
+- Focused tests: `dotnet test -c Release --filter FullyQualifiedName~NativeCompressionsCodecFactoryTests`
+- Benchmark build: `dotnet build benchmarks/Arrow.Compression.NativeCompressions.Benchmarks/Arrow.Compression.NativeCompressions.Benchmarks.csproj -c Release`
+- Benchmark dry run: `dotnet run --project benchmarks/Arrow.Compression.NativeCompressions.Benchmarks/Arrow.Compression.NativeCompressions.Benchmarks.csproj -c Release -f net8.0 -- --filter "*ArrowIpcCompressionBenchmarks*" --job Dry`
+- Full benchmarks: `dotnet run --project benchmarks/Arrow.Compression.NativeCompressions.Benchmarks/Arrow.Compression.NativeCompressions.Benchmarks.csproj -c Release -f net8.0 -- --filter "*ArrowIpcCompressionBenchmarks*"`
+- Pack: `dotnet pack -c Release`
+- There is no repo-local `global.json`, `NuGet.config`, `Directory.Packages.props`, `.editorconfig`, or CI workflow; do not assume pinned SDKs, custom NuGet sources, central package management, formatter config, or GitHub Actions behavior.
+
+## Tests and known edge cases
+
+- Existing tests are self-contained xUnit round trips using a deterministic 256 KiB payload for LZ4 and Zstd.
+- README benchmark numbers must come from this repo's full BenchmarkDotNet project; update them only with the exact command, environment, and result artifact from that run.
+- Benchmark code should compare `NativeCompressionsCodecFactory` against `Apache.Arrow.Compression.CompressionCodecFactory` on Arrow IPC read/write paths for both LZ4 frame and Zstd when feasible.
+- Current benchmark workload is deterministic `int + string` Arrow IPC data; write-path results include Arrow IPC writer and `MemoryStream.ToArray()` costs, not pure codec throughput.
+- Arrow IPC buffers may include padding after the compressed frame; preserve the exact-output-size decompression contract and validate any decoder changes against padded producer payloads.
+
+## Files to avoid editing
+
+- Do not edit generated build output under `bin/`, `obj/`, `artifacts/`, or `TestResults/`.
