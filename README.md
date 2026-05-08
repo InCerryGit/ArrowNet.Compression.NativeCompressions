@@ -1,6 +1,6 @@
 # ArrowNet.Compression.NativeCompressions
 
-High-performance [NativeCompressions](https://github.com/bgrainger/NativeCompressions)-based
+High-performance [NativeCompressions](https://github.com/Cysharp/NativeCompressions)-based
 compression codec backend for Apache Arrow .NET.
 
 This package exists because Apache Arrow .NET's default compression backend currently uses K4os for
@@ -16,7 +16,7 @@ NativeCompressions for LZ4 and Zstandard compressed Arrow IPC streams.
 
 - Experimental / preview.
 - Targets `net8.0`, `net9.0`, and `net10.0`.
-- Depends on [`NativeCompressions`](https://github.com/bgrainger/NativeCompressions), which is currently preview.
+- Depends on [`NativeCompressions`](https://github.com/Cysharp/NativeCompressions), which is currently preview.
 - Not strong-named while NativeCompressions assemblies are not strong-named.
 
 ## Usage
