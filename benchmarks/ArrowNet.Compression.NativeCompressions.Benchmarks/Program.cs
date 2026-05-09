@@ -15,7 +15,7 @@ public class ArrowIpcCompressionBenchmarks
     private byte[] _officialCompressedStream = null!;
     private ICompressionCodecFactory _factory = null!;
 
-    [Params(500_000, 1_000_000, 2_000_000)]
+    [Params(100_000, 500_000, 1_000_000)]
     public int RowCount { get; set; }
 
     [Params(CompressionCodecType.Lz4Frame, CompressionCodecType.Zstd)]
