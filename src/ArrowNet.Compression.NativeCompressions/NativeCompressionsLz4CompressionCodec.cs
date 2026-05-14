@@ -6,7 +6,7 @@ using NativeCompressions;
 
 namespace ArrowNet.Compression.NativeCompressions;
 
-internal sealed class NativeCompressionsLz4CompressionCodec : ICompressionCodec
+internal sealed class NativeCompressionsLz4CompressionCodec : ITryCompressionCodec
 {
     public void Compress(ReadOnlyMemory<byte> source, Stream destination)
     {
@@ -15,6 +15,33 @@ internal sealed class NativeCompressionsLz4CompressionCodec : ICompressionCodec
         {
             int bytesWritten = LZ4.Compress(source.Span, buffer);
             destination.Write(buffer.AsSpan(0, bytesWritten));
+        }
+        finally
+        {
+            ArrayPool<byte>.Shared.Return(buffer);
+        }
+    }
+
+    public bool TryCompress(ReadOnlyMemory<byte> source, Memory<byte> destination, out int bytesWritten)
+    {
+        byte[] buffer = ArrayPool<byte>.Shared.Rent(LZ4.GetMaxCompressedLength(source.Length));
+        try
+        {
+            int compressedLength = LZ4.Compress(source.Span, buffer);
+            if (compressedLength >= source.Length || compressedLength > destination.Length)
+            {
+                bytesWritten = 0;
+                return false;
+            }
+
+            buffer.AsSpan(0, compressedLength).CopyTo(destination.Span);
+            bytesWritten = compressedLength;
+            return true;
+        }
+        catch (LZ4Exception)
+        {
+            bytesWritten = 0;
+            return false;
         }
         finally
         {

@@ -6,7 +6,7 @@ using NativeCompressions;
 
 namespace ArrowNet.Compression.NativeCompressions;
 
-internal sealed class NativeCompressionsZstdCompressionCodec : ICompressionCodec
+internal sealed class NativeCompressionsZstdCompressionCodec : ITryCompressionCodec
 {
     private readonly int _compressionLevel;
 
@@ -27,6 +27,25 @@ internal sealed class NativeCompressionsZstdCompressionCodec : ICompressionCodec
         {
             ArrayPool<byte>.Shared.Return(buffer);
         }
+    }
+
+    public bool TryCompress(ReadOnlyMemory<byte> source, Memory<byte> destination, out int bytesWritten)
+    {
+        using var encoder = new ZstandardEncoder(_compressionLevel);
+        OperationStatus status = encoder.Compress(
+            source.Span,
+            destination.Span,
+            out int bytesConsumed,
+            out bytesWritten,
+            isFinalBlock: true);
+
+        if (status == OperationStatus.Done && bytesConsumed == source.Length && bytesWritten < source.Length)
+        {
+            return true;
+        }
+
+        bytesWritten = 0;
+        return false;
     }
 
     public int Decompress(ReadOnlyMemory<byte> source, Memory<byte> destination)
